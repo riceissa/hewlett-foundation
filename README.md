@@ -1,6 +1,6 @@
 # Hewlett Foundation
 
-This repo is for work on Vipul Naik's [Donations List Website](https://github.com/vipulnaik/).
+This repo is for work on Vipul Naik's [Donations List Website](https://github.com/vipulnaik/donations).
 
 The issue that started this repo is: https://github.com/vipulnaik/donations/issues/7
 
