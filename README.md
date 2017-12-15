@@ -6,6 +6,12 @@ The issue that started this repo is: https://github.com/vipulnaik/donations/issu
 
 For the data source, see https://www.hewlett.org/grants/
 
+Scripts:
+
+- `scrape.py`: scrapes grants info and puts it in `data.csv`.
+- `proc.py`: uses `data.csv` to print a SQL insert file that can be used with
+  the donations list website.
+
 ## License
 
 CC0 for the scripts, not sure about data.
