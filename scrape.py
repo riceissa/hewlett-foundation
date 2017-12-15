@@ -28,21 +28,36 @@ def main():
 
             for grant in soup.find_all("article", {"class": "callout"}):
                 d = {}
+
                 d['grantee'] = grant.find("h2").text.strip()
+                assert d['grantee'].strip(), d['grantee']
+
                 d['url'] = (grant.find("a", {"class": "listing-highlight-link"})
                                  .get("href"))
-                d['amount'] = (grant.find_all("div", {"class": "byline-item"})[1]
-                                    .text.strip())
-                assert d['amount'].startswith("$"), d['amount']
+                assert d['url'].strip(), d['url']
+
+                # There are two cases of bylines: those that link to a cause
+                # area and those that don't. In the latter case there is no
+                # "hero-eyebrow" class and instead one extra "byline-item".
+                hero = grant.find("a", {"class": "hero-eyebrow"})
+                byls = grant.find_all("div", {"class": "byline-item"})
+                if hero:
+                    d['cause_area'] = hero.text
+                    d['cause_area_url'] = hero.get("href")
+                    d['amount'] = (byls[1].text.strip())
+                else:
+                    d['cause_area'] = byls[0].text
+                    d['amount'] = (byls[2].text.strip())
+
+                assert d['amount'].startswith("$"), (d['amount'], d['grantee'])
+                assert d['cause_area'].strip(), d['cause_area']
+
                 awarded = grant.find("time").text
                 assert awarded.startswith("Awarded ")
                 d['date'] = awarded[len("Awarded "):]
+
                 d['notes'] = (grant.find("div", {"class": "callout-excerpt"})
                                    .text.strip())
-                d['cause_area'] = (grant.find("a", {"class": "hero-eyebrow"})
-                                        .text)
-                d['cause_area_url'] = (grant.find("a", {"class": "hero-eyebrow"})
-                                            .get("href"))
                 writer.writerow(d)
 
             page += 1
