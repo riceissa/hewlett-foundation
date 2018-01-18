@@ -18,7 +18,8 @@ CAUSE_AREAS = {
     "Philanthropy" : "Effective altruism",
     "SF Bay Area" : "SF Bay Area",
     "Special Projects" : "Special Projects",
-    "Initiatives" : "Initiatives"
+    "Initiatives" : "Initiatives",
+    "Global Development" : "Global development"
 }
 
 def mysql_quote(x):
