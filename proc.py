@@ -15,6 +15,7 @@ CAUSE_AREAS = {
     "Cyber" : "Science and Technology/Cyber",
     "Madison Initiative" : "Politics",
     "Effective Philanthropy" : "Effective altruism",
+    "Philanthropy" : "Effective altruism",
     "SF Bay Area" : "SF Bay Area",
     "Special Projects" : "Special Projects"
 }
