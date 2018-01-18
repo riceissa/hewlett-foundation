@@ -52,6 +52,9 @@ def main():
             donation_date = (datetime.datetime.strptime(row['date'],
                              "%B %d, %Y").strftime("%Y-%m-%d"))
 
+            cause_area = row['cause_area']
+            if cause_area in CAUSE_AREAS:
+                cause_area = CAUSE_ARES[cause_area]
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Hewlett Foundation"),  # donor
                 mysql_quote(row['grantee']),  # donee
@@ -59,7 +62,7 @@ def main():
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote("day"),  # donation_date_precision
                 mysql_quote("donation log"),  # donation_date_basis
-                mysql_quote(CAUSE_AREAS[row['cause_area']]),  # cause_area FIXME this needs to be mapped
+                mysql_quote(cause_area),  # cause_area FIXME this needs to be mapped
                 mysql_quote("https://www.hewlett.org/grants/"),  # url
                 mysql_quote(row['cause_area_url']),  # donor_cause_area_url
                 mysql_quote(row['notes']),  # notes
