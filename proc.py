@@ -10,6 +10,7 @@ CAUSE_AREAS = {
     "Education" : "Education",
     "Environment" : "Environmentalism",
     "Population" : "Population",
+    "Global Development and Population" : "Population",
     "Performing Arts" : "Art/performing arts",
     "Cyber" : "Science and Technology/Cyber",
     "Madison Initiative" : "Politics",
