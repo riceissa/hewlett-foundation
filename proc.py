@@ -54,7 +54,7 @@ def main():
 
             cause_area = row['cause_area']
             if cause_area in CAUSE_AREAS:
-                cause_area = CAUSE_ARES[cause_area]
+                cause_area = CAUSE_AREAS[cause_area]
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Hewlett Foundation"),  # donor
                 mysql_quote(row['grantee']),  # donee
