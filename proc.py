@@ -4,6 +4,20 @@
 import csv
 import datetime
 
+## Maps Hewlett Foundation's cause area terminology to Donations List Website's
+
+CAUSE_AREAS = {
+    "Education" : "Education",
+    "Environment" : "Environmentalism",
+    "Population" : "Population",
+    "Performing Arts" : "Art/performing arts",
+    "Cyber" : "Science and Technology/Cyber",
+    "Madison Initiative" : "Politics",
+    "Effective Philanthropy" : "Effective altruism",
+    "SF Bay Area" : "SF Bay Area",
+    "Special Projects" : "Special Projects"
+}
+
 def mysql_quote(x):
     '''
     Quote the string x using MySQL quoting rules. If x is the empty string,
@@ -41,7 +55,7 @@ def main():
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote("day"),  # donation_date_precision
                 mysql_quote("donation log"),  # donation_date_basis
-                mysql_quote(row['cause_area']),  # cause_area FIXME this needs to be mapped
+                mysql_quote(CAUSE_AREAS[row['cause_area']]),  # cause_area FIXME this needs to be mapped
                 mysql_quote("https://www.hewlett.org/grants/"),  # url
                 mysql_quote(row['cause_area_url']),  # donor_cause_area_url
                 mysql_quote(row['notes']),  # notes
