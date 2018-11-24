@@ -62,7 +62,7 @@ def main():
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Hewlett Foundation"),  # donor
                 mysql_quote(row['grantee']),  # donee
-                amount,  # amount
+                str(amount),  # amount
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote("day"),  # donation_date_precision
                 mysql_quote("donation log"),  # donation_date_basis
