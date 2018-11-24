@@ -47,7 +47,9 @@ def main():
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
 
-        for year in range(2007, datetime.datetime.now().year + 1):
+        # The JS interface only shows up to year 2007, but there's data from
+        # 2000-2006 that can be queried
+        for year in range(2000, datetime.datetime.now().year + 1):
             max_page = 100
             page = 1
             while page <= max_page:
