@@ -67,7 +67,7 @@ def main():
                 mysql_quote("day"),  # donation_date_precision
                 mysql_quote("donation log"),  # donation_date_basis
                 mysql_quote(cause_area),  # cause_area
-                mysql_quote("https://www.hewlett.org/grants/"),  # url
+                mysql_quote(row['url']),  # url
                 mysql_quote(""),  # donor_cause_area_url
                 mysql_quote(row['purpose']),  # notes
                 # FIXME these are only listed on each grant page, and there are
