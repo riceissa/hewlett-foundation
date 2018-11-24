@@ -65,7 +65,7 @@ def main():
                     result['purpose'] = item['sections'][1]
                     result['date'] = dateutil.parser.parse(item['date']).strftime("%Y-%m-%d")
                     result['amount'] = re.search(r"Amount (\$[0-9,]+)", item['body']).group(1).replace("$", "").replace(",", "")
-                    result['program'] = re.search("Amount \\$[0-9,]+ Program ([^\xa0]+) ", item['body']).group(1)
+                    result['program'] = re.search("Amount \\$[0-9,]+ Program (.+) Date Awarded", item['body']).group(1).strip()
                     writer.writerow(result)
 
                 max_page = j['info']['num_pages']
