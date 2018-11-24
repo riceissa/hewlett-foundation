@@ -27,6 +27,10 @@ def get_query(year, page):
 
 
 def main():
+    if len(sys.argv) != 1+1:
+        print("Please give the output file as an argument to the command", file=sys.stderr)
+        sys.exit()
+
     with open(sys.argv[1], "w", newline="") as f:
         fieldnames = ["grantee", "url", "amount", "date", "program", "purpose"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -51,6 +55,13 @@ def main():
                     writer.writerow(result)
 
                 max_page = j['info']['num_pages']
+
+                # The AJAX requester can only go to page 100 (?!) so if we
+                # receive a max_page of greater than 100, we're in trouble and
+                # need to filter the results even more to get this down too
+                # 100.
+                assert max_page <= 100
+
                 page += 1
 
 
