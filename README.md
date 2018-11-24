@@ -11,7 +11,7 @@ For the data source, see https://www.hewlett.org/grants/
 
 ```bash
 # Get today's date
-today=$(data -Idate)
+today=$(date -Idate)
 
 # Get new data; this takes maybe 30 minutes
 ./scrape.py data-$today.csv
