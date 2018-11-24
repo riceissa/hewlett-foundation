@@ -4,6 +4,12 @@
 import csv
 import datetime
 
+# This processing script works for the old CSV format. Starting on 2018-11-23,
+# scrape.py was updated to retrieve data from the new Hewlett website, so the
+# columns of the CSV have also changed a bit. Use proc.py for the new CSV
+# format. This legacy script is kept around in case we need to process the old
+# data format again.
+
 ## Maps Hewlett Foundation's cause area terminology to Donations List Website's
 
 CAUSE_AREAS = {
