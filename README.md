@@ -6,12 +6,25 @@ The issue that started this repo is: https://github.com/vipulnaik/donations/issu
 
 For the data source, see https://www.hewlett.org/grants/
 
-Scripts:
+## How to use the scripts
 
-- `scrape.py`: scrapes grants info and puts it in `data.csv`. Scraping takes
-  about 30 minutes.
-- `proc.py`: uses `data.csv` to print a SQL insert file that can be used with
-  the donations list website.
+
+```bash
+# Get today's date
+today=$(data -Idate)
+
+# Get new data; this takes maybe 30 minutes
+./scrape.py data-$today.csv
+
+# Convert CSV to SQL
+./proc.py data-$today.csv > out-$today.sql
+```
+
+There is also `proc_legacy.py`; for that, you need to run it like:
+
+```bash
+./proc.py > out.sql  # input CSV in data.csv
+```
 
 ## License
 
