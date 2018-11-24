@@ -9,6 +9,7 @@ import re
 import sys
 import datetime
 import dateutil.parser
+import time
 
 
 def get_query(year, page):
@@ -22,8 +23,18 @@ def get_query(year, page):
             "current_page": page,
             "years[]": year
             }
-    r = requests.post(url, data=body)
-    return r.json()
+
+    try:
+        r = requests.post(url, data=body)
+        j = r.json()
+    except:
+        # Something went wrong, so try downloading again
+        print("Downloading or decoding to JSON went wrong; trying again in a few seconds...",
+              file=sys.stderr)
+        time.sleep(3)
+        r = requests.post(url, data=body)
+        j = r.json()
+    return j
 
 
 def main():
@@ -41,6 +52,7 @@ def main():
             page = 1
             while page <= max_page:
                 print("Doing year %s, page %s/%s" % (year, page, max_page), file=sys.stderr)
+
                 j = get_query(year, page)
 
                 page_content = j['articles']['page']
