@@ -1,66 +1,58 @@
 #!/usr/bin/env python3
 # License: CC0 https://creativecommons.org/publicdomain/zero/1.0/
 
+import pdb
 import requests
 from bs4 import BeautifulSoup
 import csv
 import re
 import sys
+import datetime
+import dateutil.parser
+
+
+def get_query(year, page):
+    url = "https://hewlett.org/wp-admin/admin-ajax.php"
+    body = {
+            "action": "update_results",
+            "engine": "grant",
+            "listing_type": "/grants/",
+            "keyword": "",
+            "sort": "date",
+            "current_page": page,
+            "years[]": year
+            }
+    r = requests.post(url, data=body)
+    return r.json()
 
 
 def main():
-    url = "https://www.hewlett.org/grants/page/{}/"
-    page = 1
-    first = True
-    with open("data.csv", "w", newline="") as f:
-        fieldnames = ["grantee", "url", "amount", "date", "cause_area",
-                      "cause_area_url", "notes"]
+    with open(sys.argv[1], "w", newline="") as f:
+        fieldnames = ["grantee", "url", "amount", "date", "program", "purpose"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        while True:
-            print("Doing page", page, file=sys.stderr)
-            r = requests.get(url.format(str(page)))
-            soup = BeautifulSoup(r.content, "lxml")
 
-            if soup.body.find_all(text=re.compile('Sorry, no content was found')):
-                # We have reached the end, so stop
-                break
+        for year in range(2007, datetime.datetime.now().year + 1):
+            max_page = 100
+            page = 1
+            while page <= max_page:
+                print("Doing year %s, page %s/%s" % (year, page, max_page), file=sys.stderr)
+                j = get_query(year, page)
 
-            for grant in soup.find_all("article", {"class": "callout"}):
-                d = {}
+                page_content = j['articles']['page']
+                for item in page_content:
+                    result = {}
+                    result['url'] = item['url']
+                    result['grantee'] = item['sections'][0]
+                    result['purpose'] = item['sections'][1]
+                    result['date'] = dateutil.parser.parse(item['date']).strftime("%Y-%m-%d")
+                    result['amount'] = re.search(r"Amount (\$[0-9,]+)", item['body']).group(1).replace("$", "").replace(",", "")
+                    result['program'] = re.search("Program ([^\xa0]+) ", item['body']).group(1)
+                    writer.writerow(result)
 
-                d['grantee'] = grant.find("h2").text.strip()
-                assert d['grantee'].strip(), d['grantee']
+                max_page = j['info']['num_pages']
+                page += 1
 
-                d['url'] = (grant.find("a", {"class": "listing-highlight-link"})
-                                 .get("href"))
-                assert d['url'].strip(), d['url']
-
-                # There are two cases of bylines: those that link to a cause
-                # area and those that don't. In the latter case there is no
-                # "hero-eyebrow" class and instead one extra "byline-item".
-                hero = grant.find("a", {"class": "hero-eyebrow"})
-                byls = grant.find_all("div", {"class": "byline-item"})
-                if hero:
-                    d['cause_area'] = hero.text
-                    d['cause_area_url'] = hero.get("href")
-                    d['amount'] = (byls[1].text.strip())
-                else:
-                    d['cause_area'] = byls[0].text
-                    d['amount'] = (byls[2].text.strip())
-
-                assert d['amount'].startswith("$"), (d['amount'], d['grantee'])
-                assert d['cause_area'].strip(), d['cause_area']
-
-                awarded = grant.find("time").text
-                assert awarded.startswith("Awarded ")
-                d['date'] = awarded[len("Awarded "):]
-
-                d['notes'] = (grant.find("div", {"class": "callout-excerpt"})
-                                   .text.strip())
-                writer.writerow(d)
-
-            page += 1
 
 if __name__ == "__main__":
     main()
