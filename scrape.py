@@ -13,7 +13,7 @@ import time
 
 
 def get_query(year, page):
-    url = "https://hewlett.org/wp-admin/admin-ajax.php"
+    url = "https://hewlett.org/wp/wp-admin/admin-ajax.php"
     body = {
             "action": "update_results",
             "engine": "grant",
